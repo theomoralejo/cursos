@@ -6,6 +6,9 @@ $module_id = $module_id ? $module_id : $lesson->post_parent;
 $course_id = get_post_meta($module_id,'_module_course',true);
 if (!$course_id) $course_id = get_post_meta($lesson->ID,'_lesson_course',true);
 $lessons = get_posts(array('post_type'=>'lesson','meta_key'=>'_lesson_module','meta_value'=>$module_id,'orderby'=>'menu_order','order'=>'ASC','posts_per_page'=>-1));
+$lesson_ids = wp_list_pluck($lessons,'ID');
+$completed_ids = la_get_user_completed_lessons($user->ID, $lesson_ids);
+$progress = count($lesson_ids) ? round(count($completed_ids)/count($lesson_ids)*100) : 0;
 $publish_ts = strtotime($lesson->post_date_gmt);
 $deadline_ts = strtotime('+30 days', $publish_ts);
 $user = wp_get_current_user();
@@ -15,10 +18,10 @@ $expired = (time() > $deadline_ts) && ! $manual_ok;
 ?>
 <div class="la-lesson-page">
   <aside class="la-sidebar">
-    <div class="la-progress-badge">20% Concluído</div>
+    <div class="la-progress-badge" data-total="<?php echo count($lesson_ids); ?>" data-completed="<?php echo count($completed_ids); ?>"><?php echo $progress; ?>% Concluído</div>
     <ul class="la-lesson-list">
       <?php foreach($lessons as $l): ?>
-        <li class="<?php echo $l->ID==$lesson->ID ? 'active' : ''; ?>">
+        <li class="<?php echo $l->ID==$lesson->ID ? 'active' : ''; ?><?php echo in_array($l->ID, $completed_ids) ? ' done' : ''; ?>">
           <a href="<?php echo get_permalink($l); ?>"><?php echo esc_html($l->post_title); ?></a>
         </li>
       <?php endforeach; ?>
@@ -35,14 +38,25 @@ $expired = (time() > $deadline_ts) && ! $manual_ok;
         else echo '<div class="la-player-placeholder">Player aqui</div>';
       ?>
       <?php if ($video_file = get_post_meta($lesson->ID,'_lesson_video_file',true)): ?>
-        <video controls width="100%" id="la-native-player"><source src="<?php echo esc_url(rest_url('la/v1/materials-zip?lesson=' . intval($video_file))); ?>" type="video/mp4"></video>
+        <video controls width="100%" id="la-native-player"><source src="<?php echo esc_url(rest_url('la/v1/material?att=' . intval($video_file))); ?>" type="video/mp4"></video>
       <?php endif; ?>
     </div>
     <div class="la-actions">
-      <?php $mat = get_post_meta($lesson->ID,'_lesson_material',true); if ($mat): ?>
-        <a class="la-btn la-download" href="<?php echo esc_url(rest_url('la/v1/materials-zip?lesson=' . intval($mat))); ?>">Baixar material</a>
+      <?php
+        $materials = get_post_meta($lesson->ID,'_lesson_materials', true);
+        if (!is_array($materials) || empty($materials)) {
+            $single = get_post_meta($lesson->ID,'_lesson_material', true);
+            if ($single) $materials = array($single);
+        }
+        if (!empty($materials)):
+      ?>
+        <a class="la-btn la-download" href="<?php echo esc_url(rest_url('la/v1/materials-zip?lesson=' . $lesson->ID)); ?>">Baixar material</a>
       <?php endif; ?>
-      <button class="la-btn la-complete" data-lesson="<?php echo $lesson->ID; ?>" data-course="<?php echo intval($course_id); ?>">Marcar como Concluído</button>
+      <?php if ( in_array($lesson->ID, $completed_ids) ): ?>
+        <button class="la-btn la-complete" disabled>Concluído</button>
+      <?php else: ?>
+        <button class="la-btn la-complete" data-lesson="<?php echo $lesson->ID; ?>" data-course="<?php echo intval($course_id); ?>">Marcar como Concluído</button>
+      <?php endif; ?>
     </div>
     <div class="la-comments">
       <?php comments_template(); ?>

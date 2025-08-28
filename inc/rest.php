@@ -5,6 +5,7 @@ add_action('rest_api_init', function(){
     register_rest_route('la/v1', '/extend-access', array('methods' => 'POST','callback' => 'la_rest_extend_access','permission_callback' => function(){ return current_user_can('manage_options'); }));
     register_rest_route('la/v1', '/video-token', array('methods' => 'GET','callback' => 'la_rest_video_token','permission_callback' => function(){ return is_user_logged_in(); }));
     register_rest_route('la/v1', '/material', array('methods' => 'GET','callback' => 'la_rest_material','permission_callback' => function(){ return true; }));
+    register_rest_route('la/v1', '/materials-zip', array('methods' => 'GET','callback' => 'la_rest_materials_zip','permission_callback' => function(){ return true; }));
 });
 function la_rest_complete_lesson($request){
     $user = wp_get_current_user();
