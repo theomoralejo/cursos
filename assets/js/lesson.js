@@ -1,1 +1,44 @@
-jQuery(function($){ $(document).on('click', '.la-complete', function(e){ e.preventDefault(); var $btn = $(this); var lesson = $btn.data('lesson'); var course = $btn.data('course') || 0; $.ajax({ method: 'POST', url: LA.rest_url + 'complete-lesson', beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', LA.rest_nonce); }, data: { lesson_id: lesson, course_id: course }, success: function(res){ if (res.status === 'ok' || res.status === 'already') { $btn.text('Concluído').prop('disabled', true); } }, error: function(xhr){ alert('Erro ao marcar como concluído: ' + xhr.responseText); } }); }); $(document).on('click', '.la-request-token', function(e){ e.preventDefault(); var lesson = $(this).data('lesson'); $.get(LA.rest_url + 'video-token?lesson_id=' + lesson, function(res){ if (res.token) { alert('Token gerado: ' + res.token); } }).fail(function(xhr){ alert('Erro: ' + xhr.responseText); }); }); });
+jQuery(function($){
+  $(document).on('click', '.la-complete', function(e){
+    e.preventDefault();
+    var $btn = $(this);
+    if ($btn.prop('disabled')) return;
+    var lesson = $btn.data('lesson');
+    var course = $btn.data('course') || 0;
+    $.ajax({
+      method: 'POST',
+      url: LA.rest_url + 'complete-lesson',
+      beforeSend: function(xhr){ xhr.setRequestHeader('X-WP-Nonce', LA.rest_nonce); },
+      data: { lesson_id: lesson, course_id: course },
+      success: function(res){
+        if (res.status === 'ok' || res.status === 'already') {
+          $btn.text('Concluído').prop('disabled', true);
+          var $badge = $('.la-progress-badge');
+          if ($badge.length){
+            var total = parseInt($badge.data('total'), 10);
+            var completed = parseInt($badge.data('completed'), 10);
+            if (res.status === 'ok') completed++;
+            var percent = Math.round(completed / total * 100);
+            $badge.data('completed', completed).text(percent + '% Concluído');
+          }
+        }
+      },
+      error: function(xhr){
+        alert('Erro ao marcar como concluído: ' + xhr.responseText);
+      }
+    });
+  });
+
+  $(document).on('click', '.la-request-token', function(e){
+    e.preventDefault();
+    var lesson = $(this).data('lesson');
+    $.get(LA.rest_url + 'video-token?lesson_id=' + lesson, function(res){
+      if (res.token) {
+        alert('Token gerado: ' + res.token);
+      }
+    }).fail(function(xhr){
+      alert('Erro: ' + xhr.responseText);
+    });
+  });
+});
+
