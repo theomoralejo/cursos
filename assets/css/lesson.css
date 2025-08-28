@@ -1,0 +1,64 @@
+.la-lesson-page { display:flex; gap:24px; align-items:flex-start; margin:24px 0; } .la-sidebar { width:260px; } .la-progress-badge { background:#e6f4ea; color:#0a7a32; padding:8px 10px; border-radius:16px; font-weight:700; margin-bottom:12px; display:inline-block; } .la-lesson-list { list-style:none; padding:0; margin:0; border:1px solid #eee; border-radius:6px; overflow:hidden; } .la-lesson-list li { padding:8px 12px; border-bottom:1px solid #f2f2f2; } .la-lesson-list li.active { background:#f3f4f6; font-weight:700; } .la-main { flex:1; } .la-player { background:#111; color:#fff; height:360px; display:flex; align-items:center; justify-content:center; border-radius:6px; margin-bottom:16px; } .la-player-placeholder { color:#ddd; } .la-actions { display:flex; gap:12px; margin-bottom:18px; } .la-btn { background:#5b6d81; color:#fff; padding:10px 16px; border-radius:6px; text-decoration:none; display:inline-block; } .la-locked { padding:18px; border:1px solid #f3c6c6; background:#fff7f7; color:#803030; border-radius:6px; }
+/* Admin dual-list styles */
+.la-dual-wrap{display:flex;gap:12px}
+.la-dual-col{flex:1;border:1px solid #eee;padding:8px;border-radius:6px}
+.la-available-modules li{cursor:pointer;padding:6px;border-bottom:1px solid #f5f5f5}
+.la-selected-modules, .la-selected-lessons{min-height:60px;list-style:none;padding:6px;margin:0}
+.la-selected-modules li, .la-selected-lessons li{padding:8px;border:1px solid #e6e6e6;margin-bottom:6px;background:#fff;border-radius:4px;cursor:move}
+.small{color:#777;font-size:11px;margin-left:6px}
+
+
+/* Remove & jump controls */
+.la-selected-modules li, .la-selected-turmas li, .la-selected-lessons li, .la-module-lessons-box ul li {
+  position: relative; padding-right: 62px;
+}
+.la-remove { position:absolute; right:34px; top:6px; border:1px solid #ddd; background:#f7f7f7; border-radius:3px; cursor:pointer; line-height:1; padding:2px 6px; }
+.la-jump { position:absolute; right:6px; top:6px; font-size:11px; text-decoration:none; }
+.la-module-lessons-box ul { list-style:none; margin:6px 0; padding:0; }
+.la-module-lessons-box li { background:#fff; border:1px solid #eee; border-radius:4px; margin-bottom:6px; padding:6px 8px 6px 8px; }
+.la-module-lessons-box .controls { margin-top:6px; }
+.small { color:#777; font-size:11px; margin-left:6px }
+
+/* Lessons dual-list (course page) */
+.la-lesson-search input, .la-lesson-search { width:100%; margin-bottom:6px; }
+.la-available-lessons, .la-selected-lessons-module { list-style:none; margin:6px 0; padding:0; min-height:80px; }
+.la-available-lessons li, .la-selected-lessons-module li { padding:8px 48px 8px 8px; border:1px solid #eee; margin-bottom:6px; border-radius:4px; background:#fff; position:relative; }
+.la-selected-lessons-module li .la-remove { position:absolute; right:32px; top:6px; }
+.la-selected-lessons-module li .la-jump, .la-available-lessons li .la-jump { position:absolute; right:6px; top:6px; font-size:11px; text-decoration:none; }
+
+/* Cascading listing UI */
+.la-cascade .la-listing ul.la-lessons-check{ list-style:none; margin:8px 0; padding:0; max-height:320px; overflow:auto; border:1px solid #eee; border-radius:6px; background:#fff; }
+.la-cascade .la-listing ul.la-lessons-check li{ padding:8px 12px; border-bottom:1px solid #f1f5f9; }
+.la-cascade .la-listing ul.la-lessons-check li:last-child{ border-bottom:none; }
+.la-cascade label{ font-weight: 500; }
+
+/* Unified course manager */
+.la-course-unified-wrap{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:8px; }
+.la-list-checkbox{ list-style:none; margin:8px 0; padding:0; max-height:340px; overflow:auto; border:1px solid #eee; border-radius:6px; background:#fff; }
+.la-list-checkbox li{ padding:8px 12px; border-bottom:1px solid #f3f4f6; }
+.la-list-checkbox li:last-child{ border-bottom:none; }
+.la-selected-lessons-module{ list-style:none; margin:8px 0; padding:0; min-height:60px; border:1px dashed #e5e7eb; border-radius:6px; background:#fff; }
+.la-selected-lessons-module li{ padding:8px 48px 8px 12px; position:relative; border-bottom:1px solid #f3f4f6; }
+.la-selected-lessons-module li:last-child{ border-bottom:none; }
+#la_current_lessons .la-remove{ position:absolute; right:38px; top:6px; }
+#la_current_lessons .la-jump{ position:absolute; right:6px; top:6px; font-size:11px; text-decoration:none; }
+.la-toolbar{ display:flex; gap:12px; align-items:center; }
+
+
+/* UX: make items clearly clickable; ensure remove is above link */
+.la-available-modules .la-item,
+.la-available-turmas .la-item { cursor: pointer; }
+.la-remove { z-index: 2; position: absolute; }
+.la-jump { z-index: 1; }
+.la-selected-modules li, .la-selected-turmas li { padding-right: 100px; }
+
+/* Module add lessons */
+.la-mod-add .la-cols{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+#la_mod_current{ list-style:none; margin:8px 0; padding:0; min-height:60px; border:1px dashed #e5e7eb; border-radius:6px; background:#fff; }
+#la_mod_current li{ padding:8px 48px 8px 12px; border-bottom:1px solid #f3f4f6; position:relative; }
+#la_mod_current li:last-child{ border-bottom:none; }
+#la_mod_current .la-remove{ position:absolute; right:38px; top:6px; }
+#la_mod_current .la-jump{ position:absolute; right:6px; top:6px; font-size:11px; text-decoration:none; }
+#la_mod_available{ list-style:none; margin:8px 0; padding:0; max-height:340px; overflow:auto; border:1px solid #eee; border-radius:6px; background:#fff; }
+#la_mod_available li{ padding:8px 12px; border-bottom:1px solid #f3f4f6; }
+#la_mod_available li:last-child{ border-bottom:none; }
